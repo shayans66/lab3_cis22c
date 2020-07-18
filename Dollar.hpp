@@ -25,6 +25,7 @@ private:
 public:
     // Constructor to initialize Dollar object
     // with number of whole and fractional currency, note and coin name
+    Dollar(){};
     Dollar(int whole_part, int fractional_part, std::string note_name, std::string coin_name);
     
     // Destructor

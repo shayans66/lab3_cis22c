@@ -1,180 +1,183 @@
 //
-// Lab 1 - Classes, Inheritance and Polymorphism
+// Lab 3 - Sorting Arrays
 //  Ethan Sarnevsht
-// Purpose: to Demonstrate object oriented programming concepts using classes dealing
-// with currencies like Dollar, Canadian Dollar, etc.
+// Purpose: To demonstrate mastery of class templates and how to sort an array of different
+//  types of arrays using mergesort
 
 /*
  PSEUDOCODE:
  
- Create Wallet
  
- Do while user input is not quit:
-    print options for whether to add money, subtract money, compare current american and
-            canadian dollars, or quit
-    if add money is choice:
-        ask if us or canadian
-        perform calculation
-    if subtract money is choice:
-        ask if us or canadian
-        perform calculation
-    if compare is choice:
-        perform calculation
-        print which one is greater
 
  */
 #include <iostream>
 #include <string>
+#include <cstring>
+
+#include <fstream>
 
 #include "Dollar.hpp"
 
+#define SORT_MAX_SIZE 16
+
 using namespace std;
 
-// gets int b/w 1 and 4
-void get_int(int &choice);
+template<typename T, int size>
+class Array{
+private:
+    T arr[size];
+public:
+    
+    T& getArray(){
+        return arr;
+    }
+    int getSize() const{
+        return size;
+    }
+    T getElement(int elem){
+        return arr[elem];
+    }
+    
+};
 
-bool isDigitBetween(string input, int from, int to);
-void printMenu();
+template<typename T>
+class Entity{
+private:
+    T entity;
+public:
+    
+    
+    T getEntity(){
+        return entity;
+    }
+    void setEntity(T e){
+        entity = e;
+    }
+    
+};
 
+template <typename T>
+void mergeSort(T Arr[], int start, int end){
+    if(start < end) {
+        int mid = (start + end) / 2;
+        mergeSort(Arr, start, mid);
+        mergeSort(Arr, mid+1, end);
+        merge(Arr, start, mid, end);
+    }
+}
+template <typename T>
+void merge(T Arr[], int start, int mid, int end){
+    // create a temp array
+    int temp[end - start + 1];
+    
+    // crawlers for both intervals and for temp
+    int i = start, j = mid+1, k = 0;
+    
+    // traverse both arrays and in each iteration add smaller of both elements in temp
+    while(i <= mid && j <= end) {
+        if(Arr[i] <= Arr[j]) {
+            temp[k] = Arr[i];
+            k += 1; i += 1;
+        }
+        else {
+            temp[k] = Arr[j];
+            k += 1; j += 1;
+        }
+    }
+    
+    // add elements left in the first interval
+    while(i <= mid) {
+        temp[k] = Arr[i];
+        k += 1; i += 1;
+    }
+    
+    // add elements left in the second interval
+    while(j <= end) {
+        temp[k] = Arr[j];
+        k += 1; j += 1;
+    }
+    
+    // copy temp to original interval
+    for(i = start; i <= end; i += 1) {
+        Arr[i] = temp[i - start];
+    }
+}
+template <typename  T>
+// compare function that works for Dollar, int, or string objects
+// returns -1 if t1>t2, 1 if t1<t2, or 0 if t1=t2
+int compare(T t1, T t2){
+}
+
+// MAIN METHOD
 int main(){
     
     
-    // Create wallet
-    Wallet* wallet = new Wallet();
     
-    // output menu to console
-    printMenu();
+    int num_elements=0;
+    cout << "Enter a sorting size for the array (between 1 and 16): ";
     
+    while( !(cin >> num_elements) || num_elements > SORT_MAX_SIZE || num_elements < 1){
+        // Explain error
+        cout << "Error: Enter a number between 1 and 16: ";
+        // clear previous input
+        cin.clear();
+        // discard previous input
+        cin.ignore(123, '\n');
+    }
+    
+    // what type of data do you want to enter?
+    cout << "What type of data do you want to enter? " << endl;
+    cout << "1: Integer" << endl;
+    cout << "2: String" << endl;
+    cout << "3: Dollar" << endl;
     int choice;
-    get_int(choice);
+    cin >> choice;
     
-    cout << choice<< endl;
+    Entity<int> arr_int[num_elements];
+    Entity<string> arr_str[num_elements];
+    Entity<Dollar> arr_dollar[num_elements];
     
-    while(choice != 4){
-        // Adding
-        if(choice == 1 ){
-            cout << "American or Canadian? (c/d) " << endl;
-            string subchoice;
-            cin >> subchoice;
-            // if user chooses dollar
-            if(subchoice.compare("d")==0){
-                int whole, part;
-                cout << "Whole dollars: "; cin >> whole;
-                cout << "Fractional cents: "; cin >> part;
-                // Create dollar object iwth given attributes for whole/part
-                Dollar dol(whole, part, "Dollar", "Cent");
-                
-                // Add dollar to wallet
-                wallet->addDollar(dol);
-                
+    
+    
+//    Array<string, SORT_MAX_SIZE> stringarray;
+//    Array<Dollar, SORT_MAX_SIZE> dollararray;
+//    Array<int, SORT_MAX_SIZE> intarray;
+
+    switch(choice){
+        case 1:
+            for(int i=0; i<num_elements; i++ ){
+                cout << "Enter element #" << i+1 << ": ";
+                int buffer; cin >> buffer;
+                arr_int[i].setEntity(buffer);
             }
-            // if user chooses canadian dollar
-            if(subchoice.compare("c")==0){
-                int whole, part;
-                cout << "Whole dollars: "; cin >> whole;
-                cout << "Fractional cents: "; cin >> part;
-                // Create dollar object iwth given attributes for whole/part
-                CanadianDollar dol(whole, part, "Loonie", "Mint");
-                
-                // Add dollar to wallet
-                wallet->addCanadianDollar(dol);
+            break;
+        case 2:
+            for(int i=0; i<num_elements; i++ ){
+                cout << "Enter element #" << i+1 << ": ";
+                string buffer; cin >> buffer;
+                arr_str[i].setEntity(buffer);
             }
+            break;
             
-            // print out current bills in wallet
-            cout << "Current Inventory: " <<endl;
-            cout << "American dollars: " << wallet->getDollar() << endl;
-            cout << "Canadian dollars: " << wallet->getCanadianDollar() << endl;
-        }
-        // Subtracting
-        if(choice == 2 ){
-            cout << "American or Canadian? (c/d) " << endl;
-            string subchoice;
-            cin >> subchoice;
-            // if user chooses dollar
-            if(subchoice.compare("d")==0){
-                int whole, part;
-                cout << "Whole dollars: "; cin >> whole;
-                cout << "Fractional cents: "; cin >> part;
-                // Create dollar object iwth given attributes for whole/part
-                Dollar dol(whole, part, "Dollar", "Cent");
-                
-                // Add dollar to wallet
-                wallet->subtractDollar(dol);
-                
+        case 3:
+            for(int i=0; i<num_elements; i++ ){
+                cout << "Enter element #" << i+1 << ": ";
+                int whole; cin >> whole;
+                int part; cin >> part;
+                Dollar* buffer = new Dollar(whole, part, "Dollar", "Cent");
+                arr_dollar[i].setEntity(*buffer);
             }
-            // if user chooses canadian dollar
-            if(subchoice.compare("c")==0){
-                int whole, part;
-                cout << "Whole dollars: "; cin >> whole;
-                cout << "Fractional cents: "; cin >> part;
-                // Create dollar object iwth given attributes for whole/part
-                CanadianDollar dol(whole, part, "Loonie", "Mint");
-                
-                // Add dollar to wallet
-                wallet->subtractCanadianDollar(dol);
-            }
-            
-            // print out current bills in wallet
-            cout << "Current Inventory: " <<endl;
-            cout << "American dollars: " << wallet->getDollar() << endl;
-            cout << "Canadian dollars: " << wallet->getCanadianDollar() << endl;
-        }
-        // Comparing American dollar to Canadian Dollar
-        if(choice == 3 ){
-            // if dollars are equal
-            if( *CanadianDollar::convertToCanadianDollar(wallet->getDollar())
-               == wallet->getCanadianDollar() ){
-                cout << "Dollars are equal" << endl;
-            }
-            else if( *CanadianDollar::convertToCanadianDollar(wallet->getDollar())
-               > wallet->getCanadianDollar() ){
-                cout << "American dollar is greater" << endl;
-            }
-            else if( *CanadianDollar::convertToCanadianDollar(wallet->getDollar())
-               > wallet->getCanadianDollar() ){
-                cout << "Canadian dollar is greater" << endl;
-            }
-            
-            
-        }
-        
-        
-        // print menu, and get choice
-        printMenu();
-        get_int(choice);
+            break;
     }
     
     
     
-
     
-    delete wallet;
     
     // end of program
     cout << "Enter string and press enter to end program. ";
     // pauses here, press enter to end
     string smth;
     cin >> smth;
-}
-void printMenu(){
-    
-    cout<<"Wallet options: Type in digit to select option"<<endl;
-    cout<<"1. Add Dollars"<<endl;
-    cout<<"2. Subtract Dollars"<<endl;
-    cout<<"3. Compare Dollars"<<endl;
-    cout<<"4. Exit Wallet"<<endl;
-    
-}
-// gets int b/w 1 and 4
-void get_int(int &choice){
-    cout << "Please enter number (1-4): ";
-    // Exception handling given that input integer isn't an integer or between 1 and 4
-    while( !(cin >> choice) || (choice < 0 || choice>4)  ){
-        cout << "Error: Enter a number 1 through 4: ";
-        // Clearing previous input
-        cin.clear();
-        // Discarding previous input
-        cin.ignore(123, '\n');
-    }
 }
 
