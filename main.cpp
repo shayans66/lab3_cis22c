@@ -30,69 +30,67 @@ void print_array(T arr[], int size){
 }
 
 template<typename T>
-class Entity{
+class MergeHelper {
+    int size;
 public:
-    T entity;
+    MergeHelper(int size) {
+        this->size = size;
+    }
+    
+    void merge(T Arr[], int start, int mid, int end){
+        // create a temp array
+        T temp[end - start + 1];
+        
+        // crawlers for both intervals and for temp
+        int i = start, j = mid+1, k = 0;
+        
+        // traverse both arrays and in each iteration add smaller of both elements in temp
+        while(i <= mid && j <= end) {
+            if((Arr[i] < Arr[j]) || (Arr[i] == Arr[j])) {
+                temp[k] = Arr[i];
+                k += 1; i += 1;
+            }
+            else {
+                temp[k] = Arr[j];
+                k += 1; j += 1;
+            }
+        }
+        
+        // add elements left in the first interval
+        while(i <= mid) {
+            temp[k] = Arr[i];
+            k += 1; i += 1;
+        }
+        
+        // add elements left in the second interval
+        while(j <= end) {
+            temp[k] = Arr[j];
+            k += 1; j += 1;
+        }
+        
+        // copy temp to original interval
+        for(i = start; i <= end; i += 1) {
+            Arr[i] = temp[i - start];
+        }
+    }
+    
+    void mergeSort(T Arr[], int start, int end){
+        if(start < end) {
+            int mid = (start + end) / 2;
+            mergeSort(Arr, start, mid);
+            mergeSort(Arr, mid+1, end);
+            merge(Arr, start, mid, end);
+        }
+    }
 
     
-    
-    T getEntity(){
-        return entity;
-    }
-    void setEntity(T e){
-        entity = e;
-    }
     
 };
 
 
-template <typename T>
-void merge(T Arr[], int start, int mid, int end){
-    // create a temp array
-     T temp[end - start + 1];
-    
-    // crawlers for both intervals and for temp
-    int i = start, j = mid+1, k = 0;
-    
-    // traverse both arrays and in each iteration add smaller of both elements in temp
-    while(i <= mid && j <= end) {
-        if((Arr[i] < Arr[j]) || (Arr[i] == Arr[j])) {
-            temp[k] = Arr[i];
-            k += 1; i += 1;
-        }
-        else {
-            temp[k] = Arr[j];
-            k += 1; j += 1;
-        }
-    }
-    
-    // add elements left in the first interval
-    while(i <= mid) {
-        temp[k] = Arr[i];
-        k += 1; i += 1;
-    }
-    
-    // add elements left in the second interval
-    while(j <= end) {
-        temp[k] = Arr[j];
-        k += 1; j += 1;
-    }
-    
-    // copy temp to original interval
-    for(i = start; i <= end; i += 1) {
-        Arr[i] = temp[i - start];
-    }
-}
 
-template <typename T>
-void mergeSort(T Arr[], int start, int end){
-    if(start < end) {
-        int mid = (start + end) / 2;
-        mergeSort(Arr, start, mid);
-        mergeSort(Arr, mid+1, end);
-        merge(Arr, start, mid, end);
-    }
-}
+
+
 
 // MAIN METHOD
 int main(){
@@ -130,38 +128,42 @@ int main(){
     //    Array<int, SORT_MAX_SIZE> intarray;
     
     switch(choice){
-        case 1:
+        case 1: {
             for(int i=0; i<num_elements; i++ ){
                 cout << "Enter element #" << i+1 << ": ";
                 cin >> arr_int[i];
             }
-            mergeSort(arr_int, 0, num_elements-1);
-            
+            MergeHelper<int> merger(num_elements);
+            merger.mergeSort(arr_int, 0, num_elements-1);
             print_array(arr_int, num_elements);
-            
             break;
-        case 2:
+        }
+        case 2: {
             for(int i=0; i<num_elements; i++ ){
                 cout << "Enter element #" << i+1 << ": ";
                 cin >> arr_str[i];
             }
-             mergeSort(arr_str, 0, num_elements-1);
-            
-            
+            MergeHelper<string> merger(num_elements);
+            merger.mergeSort(arr_str, 0, num_elements-1);
             print_array(arr_str, num_elements);
             break;
-            
-        case 3:
+        }
+        case 3: {
             for(int i=0; i<num_elements; i++ ){
                 cout << "Enter element #" << i+1 << ": ";
+                cout << "Dollars: ";
                 int whole; cin >> whole;
+                cout << "Cents: ";
                 int part; cin >> part;
                 Dollar* buffer = new Dollar(whole, part, "Dollar", "Cent");
                 arr_dollar[i] = *buffer;
             }
-            mergeSort(arr_dollar, 0, num_elements-1);
-        
+            MergeHelper<Dollar> merger(num_elements);
+            merger.mergeSort(arr_dollar, 0, num_elements-1);
+            
+            print_array(arr_dollar, num_elements);
             break;
+        }
     }
     
     
