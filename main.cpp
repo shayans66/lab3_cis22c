@@ -7,6 +7,21 @@
 /*
  PSEUDOCODE:
  
+ Ask for array size
+ 
+ While input is out of bounds or invalid:
+ clear previous input
+ ask again
+ 
+ Ask what type of data user desires
+ 
+ Depending on user’s data, do the following:
+ Take user input for each array element
+ sort array using merge sort template function within template class
+ For each element in array:
+ print element
+ write to output text file
+
  
  
  */
@@ -24,8 +39,15 @@ using namespace std;
 
 template<typename T>
 void print_array(T arr[], int size){
+    
+    ofstream outfile;
+    outfile.open("/Users/android/Desktop/outfile.txt");
+    
+    
+    cout << "Printing Array: " << endl;
     for(int i=0;i<size;i++){
         cout << arr[i] << endl;
+        outfile << arr[i] << endl;
     }
 }
 
@@ -165,6 +187,7 @@ int main(){
             break;
         }
     }
+    
     
     
     
