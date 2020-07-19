@@ -24,7 +24,7 @@ Dollar::Dollar(int whole_part, int fractional_part, std::string note_name, std::
     
     this->note_name = note_name;
     this->coin_name = coin_name;
-   
+    
     
 }
 
@@ -73,15 +73,15 @@ void Dollar::operator-(Dollar& other){
 // Compare 2 dollar objects
 bool Dollar::operator==(Dollar& other){
     return whole_part == other.get_whole_part() &&
-        fractional_part == other.get_fractional_part();
+    fractional_part == other.get_fractional_part();
 }
 // Compare Dollar objects to see if 'this' is Greater than 'other'
 bool Dollar::operator> (Dollar& other){
     if ( !(this->whole_part == other.whole_part))
         return this->get_whole_part() > other.get_whole_part();
     return this->get_fractional_part() > other.get_fractional_part();
-        
-      
+    
+    
 }
 // Compare Dollar objects to see if 'this' is less than 'other'
 bool Dollar::operator< (Dollar& other){
@@ -95,7 +95,7 @@ std::ostream& operator<<(std::ostream& stream, Dollar& obj){
     
     stream <<  obj.whole_part << " " << obj.note_name  << "(s) and " << obj.fractional_part << " "
     << obj.coin_name << "(s)" << std::endl;
-
+    
     return stream;
 }
 
@@ -115,7 +115,7 @@ CanadianDollar* CanadianDollar::convertToCanadianDollar(Dollar& dollar){
     int whole, frac;
     whole = dollar.get_whole_part() * US_TO_CAD;
     frac = dollar.get_fractional_part() * US_TO_CAD;
-
+    
     return new CanadianDollar(whole, frac, "Loonie", "Mint");
 }
 
@@ -138,7 +138,7 @@ Wallet::~Wallet(){}
 void Wallet::addDollar(Dollar& dollar){
     dollars[0]->set_whole_part( dollars[0]->get_whole_part() + dollar.get_whole_part() );
     dollars[0]->set_fractional_part( dollars[0]->get_fractional_part()+ dollar.get_fractional_part() );
-
+    
     
 }
 void Wallet::subtractDollar(Dollar& dollar){

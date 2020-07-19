@@ -8,7 +8,7 @@
  PSEUDOCODE:
  
  
-
+ 
  */
 #include <iostream>
 #include <string>
@@ -22,13 +22,18 @@
 
 using namespace std;
 
-
+template<typename T>
+void print_array(T arr[], int size){
+    for(int i=0;i<size;i++){
+        cout << arr[i] << endl;
+    }
+}
 
 template<typename T>
 class Entity{
-private:
-    T entity;
 public:
+    T entity;
+
     
     
     T getEntity(){
@@ -40,26 +45,18 @@ public:
     
 };
 
-template <typename T>
-void mergeSort(T Arr[], int start, int end){
-    if(start < end) {
-        int mid = (start + end) / 2;
-        mergeSort(Arr, start, mid);
-        mergeSort(Arr, mid+1, end);
-        merge(Arr, start, mid, end);
-    }
-}
+
 template <typename T>
 void merge(T Arr[], int start, int mid, int end){
     // create a temp array
-    int temp[end - start + 1];
+     T temp[end - start + 1];
     
     // crawlers for both intervals and for temp
     int i = start, j = mid+1, k = 0;
     
     // traverse both arrays and in each iteration add smaller of both elements in temp
     while(i <= mid && j <= end) {
-        if(Arr[i] <= Arr[j]) {
+        if((Arr[i] < Arr[j]) || (Arr[i] == Arr[j])) {
             temp[k] = Arr[i];
             k += 1; i += 1;
         }
@@ -87,6 +84,15 @@ void merge(T Arr[], int start, int mid, int end){
     }
 }
 
+template <typename T>
+void mergeSort(T Arr[], int start, int end){
+    if(start < end) {
+        int mid = (start + end) / 2;
+        mergeSort(Arr, start, mid);
+        mergeSort(Arr, mid+1, end);
+        merge(Arr, start, mid, end);
+    }
+}
 
 // MAIN METHOD
 int main(){
@@ -113,33 +119,36 @@ int main(){
     int choice;
     cin >> choice;
     
-    Entity<int> arr_int[num_elements];
-    Entity<string> arr_str[num_elements];
-    Entity<Dollar> arr_dollar[num_elements];
+    int arr_int[num_elements];
+    string arr_str[num_elements];
+    Dollar arr_dollar[num_elements];
     
     
     
-//    Array<string, SORT_MAX_SIZE> stringarray;
-//    Array<Dollar, SORT_MAX_SIZE> dollararray;
-//    Array<int, SORT_MAX_SIZE> intarray;
-
+    //    Array<string, SORT_MAX_SIZE> stringarray;
+    //    Array<Dollar, SORT_MAX_SIZE> dollararray;
+    //    Array<int, SORT_MAX_SIZE> intarray;
+    
     switch(choice){
         case 1:
             for(int i=0; i<num_elements; i++ ){
                 cout << "Enter element #" << i+1 << ": ";
-                int buffer; cin >> buffer;
-                arr_int[i].setEntity(buffer);
+                cin >> arr_int[i];
             }
+            mergeSort(arr_int, 0, num_elements-1);
             
-            
+            print_array(arr_int, num_elements);
             
             break;
         case 2:
             for(int i=0; i<num_elements; i++ ){
                 cout << "Enter element #" << i+1 << ": ";
-                string buffer; cin >> buffer;
-                arr_str[i].setEntity(buffer);
+                cin >> arr_str[i];
             }
+             mergeSort(arr_str, 0, num_elements-1);
+            
+            
+            print_array(arr_str, num_elements);
             break;
             
         case 3:
@@ -148,8 +157,10 @@ int main(){
                 int whole; cin >> whole;
                 int part; cin >> part;
                 Dollar* buffer = new Dollar(whole, part, "Dollar", "Cent");
-                arr_dollar[i].setEntity(*buffer);
+                arr_dollar[i] = *buffer;
             }
+            mergeSort(arr_dollar, 0, num_elements-1);
+        
             break;
     }
     

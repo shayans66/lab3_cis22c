@@ -21,7 +21,7 @@ private:
     int fractional_part;
     
     std::string note_name, coin_name;
-
+    
 public:
     // Constructor to initialize Dollar object
     // with number of whole and fractional currency, note and coin name
@@ -121,8 +121,8 @@ public:
      Return: Newly generated converted American Dollar
      */
     static Dollar* convertToDollar(CanadianDollar& cad);
-
-
+    
+    
 };
 
 
