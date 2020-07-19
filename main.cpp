@@ -22,23 +22,7 @@
 
 using namespace std;
 
-template<typename T, int size>
-class Array{
-private:
-    T arr[size];
-public:
-    
-    T& getArray(){
-        return arr;
-    }
-    int getSize() const{
-        return size;
-    }
-    T getElement(int elem){
-        return arr[elem];
-    }
-    
-};
+
 
 template<typename T>
 class Entity{
@@ -102,11 +86,7 @@ void merge(T Arr[], int start, int mid, int end){
         Arr[i] = temp[i - start];
     }
 }
-template <typename  T>
-// compare function that works for Dollar, int, or string objects
-// returns -1 if t1>t2, 1 if t1<t2, or 0 if t1=t2
-int compare(T t1, T t2){
-}
+
 
 // MAIN METHOD
 int main(){
@@ -150,6 +130,9 @@ int main(){
                 int buffer; cin >> buffer;
                 arr_int[i].setEntity(buffer);
             }
+            
+            
+            
             break;
         case 2:
             for(int i=0; i<num_elements; i++ ){
@@ -169,6 +152,7 @@ int main(){
             }
             break;
     }
+    
     
     
     
